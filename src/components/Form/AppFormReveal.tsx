@@ -80,6 +80,8 @@ const AppFormReveal = () => {
 
   if (isChecking || storageLoading) return <CatLoader />;
 
+  console.log('biddingEnd', biddingEnd);
+  
   if (!biddingEnd)
     return (
       <div>

@@ -28,7 +28,6 @@ export const useBidAction = () => {
 
   const hasBidding = async (address: string) => {
     const biddingHash = await zkBidInstance?.bidHashes(address);
-    console.log(biddingHash, "biddingHash");
     storageData.updateBidHashes(+biddingHash);
     return biddingHash;
   };
@@ -40,7 +39,7 @@ export const useBidAction = () => {
   };
 
   const checkBiddingEnd = async () => {
-    const biddingEnd = await zkBidInstance?.biddingEnd();
+    const biddingEnd = (await zkBidInstance?.timeReveal()) > 0 ? true : false;
     storageData.updateBiddingEnd(biddingEnd);
     return biddingEnd;
   };

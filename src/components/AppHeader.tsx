@@ -20,12 +20,14 @@ const AppHeader = () => {
             }}
           >
             <Col>
-              <Image
-                src="/assets/img/logo.svg"
-                alt=""
-                width={120}
-                height={120}
-              />
+              <Link href={"/"}>
+                <Image
+                  src="/assets/img/logo.svg"
+                  alt=""
+                  width={120}
+                  height={120}
+                />
+              </Link>
             </Col>
             {/* <Col
               style={{

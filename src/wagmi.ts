@@ -70,7 +70,7 @@ const getTestNetChain = () => {
 const { chains, provider, webSocketProvider } = configureChains(
   [
     // @ts-ignore
-    ...[bscTestnet, fantomTestnet, polygonMumbai],
+    ...[polygonMumbai],
     // ...(process.env.NODE_ENV === "development" ? [bscTestnet] : []),
   ],
   [publicProvider()]

@@ -1,4 +1,5 @@
 import { Layout, Typography } from "antd";
+import { useEffect } from "react";
 import { useAccount } from "wagmi";
 import AppListPlayer from "../components/AppListPlayer";
 import AppFormBid from "../components/Form/AppFormBid";

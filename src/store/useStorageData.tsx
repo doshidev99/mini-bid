@@ -20,7 +20,7 @@ export interface IStorageData {
   bidValue: number;
   totalBids: number;
   totalRevealed: number;
-  dataList: Array<TDataList> | null;
+  dataList: Array<TDataList>;
 }
 
 const initialValues = {
@@ -34,7 +34,7 @@ const initialValues = {
   biddingEnd: false,
   totalBids: 0,
   totalRevealed: 0,
-  dataList: null,
+  dataList: [],
 };
 
 export const useStorageData = create<

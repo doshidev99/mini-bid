@@ -31,30 +31,15 @@ interface DataType {
 }
 
 const DashBoardContent = () => {
-  const [open, onToggle] = useToggle(false);
-
   const { loading } = useGetPlayers();
   const { dataList, totalRevealed } = useStorageData();
-
-  const handleCancel = () => {
-    onToggle();
-  };
-
-  const handleOk = async () => {
-    // const tx = await zkBidInstance?.bid(dataBid.proofBid, dataBid.hash);
-    // toast.promise(tx.wait().finally(onToggle), {
-    //   loading: "Loading",
-    //   success: "Got the data",
-    //   error: "Error when fetching",
-    // });
-  };
 
   const columns: ColumnsType<DataType> = [
     {
       title: "STT",
       dataIndex: "key",
       key: "key",
-      render: (stt) => <small>{stt}</small>,
+      render: (stt) => <small>#{stt}</small>,
     },
 
     {
@@ -63,26 +48,26 @@ const DashBoardContent = () => {
       key: "bid hash",
       render: (address) => <small>{address}</small>,
     },
-    {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags",
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "Not Ready") {
-              color = "volcano";
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
+    // {
+    //   title: "Tags",
+    //   key: "tags",
+    //   dataIndex: "tags",
+    //   render: (_, { tags }) => (
+    //     <>
+    //       {tags.map((tag) => {
+    //         let color = tag.length > 5 ? "geekblue" : "green";
+    //         if (tag === "Not Ready") {
+    //           color = "volcano";
+    //         }
+    //         return (
+    //           <Tag color={color} key={tag}>
+    //             {tag.toUpperCase()}
+    //           </Tag>
+    //         );
+    //       })}
+    //     </>
+    //   ),
+    // },
     {
       title: "Bid Value",
       dataIndex: "bidValue",
@@ -92,21 +77,24 @@ const DashBoardContent = () => {
       render: (value) => {
         return (
           <small>
-            {!!+value ? +value : <Tag color="processing">Waiting reveal</Tag>}
+            {!!+value ? +value + '$' : <Tag color="processing">Waiting reveal</Tag>}
           </small>
         );
       },
     },
   ];
 
-  if (!dataList) return null;
-
   return (
     <>
       <Row justify={"space-between"}>
         <Col md={12}>
           <Typography>
-            <Typography.Title className="font-game">
+            <Typography.Title
+              className="font-game"
+              style={{
+                fontSize: 20,
+              }}
+            >
               Total Auctioneer: {+dataList?.length}
             </Typography.Title>
           </Typography>
@@ -119,7 +107,12 @@ const DashBoardContent = () => {
           }}
         >
           <Typography>
-            <Typography.Title className="font-game">
+            <Typography.Title
+              className="font-game"
+              style={{
+                fontSize: 20,
+              }}
+            >
               Revealed: {totalRevealed} / {+dataList?.length}
             </Typography.Title>
           </Typography>

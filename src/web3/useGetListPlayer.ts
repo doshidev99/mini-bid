@@ -1,7 +1,8 @@
-import { useRouter } from "next/router";
 import { multicall } from "@wagmi/core";
+import { useRouter } from "next/router";
 import { useToggle } from "./../hooks/useToggle";
 import { useStorageData } from "./../store/useStorageData";
+import { useBidAction } from "./useBidAction";
 
 import { useEffect } from "react";
 import { useSigner } from "wagmi";
@@ -19,7 +20,6 @@ export const useGetDataPlayer = () => {
       address: contractInstance.address,
       abi: ZKAbi,
     };
-    updateStorageLoad(true);
     try {
       const totalUserBidding = await contractInstance?.totalUsersBidding();
       const contracts = [...new Array(+totalUserBidding).keys()].map((i) => ({
@@ -59,7 +59,6 @@ export const useGetDataPlayer = () => {
         };
       });
       updateDataList(_data as any);
-      updateStorageLoad(false);
       return _data;
     } catch (er: any) {
       console.log(er?.reason);
@@ -75,21 +74,20 @@ export const useGetPlayers = () => {
 
   const contractInstance = useContractZkBid(data);
   const [loading, setLoading] = useToggle(false);
-  const { updateTotalRevealed } = useStorageData();
-
-  const getTotalRevealed = async () => {
-    if (!contractInstance) return 0;
-    const total = await contractInstance?.revealed();
-    updateTotalRevealed(+total);
-    return total;
-  };
+  const { getTotalRevealed } = useBidAction();
 
   const get = useGetDataPlayer();
   useEffect(() => {
+    let idTimeout: any;
     if (isReady && contractInstance) {
       setLoading();
-      Promise.all([get(), getTotalRevealed()]).finally(setLoading);
+      idTimeout = setInterval(() => {
+        Promise.all([get(), getTotalRevealed()]).finally(setLoading);
+      }, 15000);
     }
+    return () => {
+      clearInterval(idTimeout);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

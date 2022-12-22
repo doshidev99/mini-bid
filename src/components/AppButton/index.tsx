@@ -19,9 +19,9 @@ const AppButton = ({ method, children, callback, ...rest }: IndexProps) => {
     try {
       const tx = (await method()) as any;
       toast.promise(tx.wait(), {
-        loading: "Loading",
-        success: "Got the data",
-        error: "Error when fetching",
+               loading: "Transaction is pending",
+          success: "Transaction is successful ",
+          error: "Transaction is failed",
       });
       return Promise.resolve(null);
     } catch (err) {

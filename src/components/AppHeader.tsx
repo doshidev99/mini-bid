@@ -29,36 +29,6 @@ const AppHeader = () => {
                 />
               </Link>
             </Col>
-            {/* <Col
-              style={{
-                color: "#fff",
-              }}
-            >
-              {[
-                {
-                  name: "Home",
-                  href: "/",
-                },
-                {
-                  name: "Dashboard",
-                  href: "/dashboard",
-                },
-              ].map((link) => {
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    style={{
-                      fontSize: 16,
-                      paddingRight: 10,
-                      color: "#fff",
-                    }}
-                  >
-                    {link.name}
-                  </Link>
-                );
-              })}
-            </Col> */}
           </Row>
         </Col>
 

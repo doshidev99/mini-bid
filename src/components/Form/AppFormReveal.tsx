@@ -1,4 +1,14 @@
-import { Button, Col, Form, Image, Input, Modal, Row, Typography } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Image,
+  Input,
+  InputNumber,
+  Modal,
+  Row,
+  Typography,
+} from "antd";
 import axios from "axios";
 import { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -80,6 +90,8 @@ const AppFormReveal = () => {
 
   if (isChecking || storageLoading) return <CatLoader />;
 
+  console.log("biddingEnd", biddingEnd);
+
   if (!biddingEnd)
     return (
       <div>
@@ -108,8 +120,7 @@ const AppFormReveal = () => {
       <div className="font-game text-center">
         <Typography.Title color="secondary" className="text-center" level={3}>
           You have already reveal your bid Your Bid:{" "}
-          {Number(myBidValue).toLocaleString()}
-          ETH
+          {Number(myBidValue).toLocaleString()} {"$"}
         </Typography.Title>
       </div>
     );
@@ -150,13 +161,22 @@ const AppFormReveal = () => {
             <Form.Item
               name="amount"
               rules={[
-                { required: true, message: "Please input your amount bid!" },
+                {
+                  required: true,
+                  message: "Please input your amount bid!",
+                },
+                { type: "number", min: 21 },
               ]}
             >
-              <Input
+              <InputNumber
+                style={{
+                  width: 100 + "%",
+                  color: "white",
+                  background: "#fff",
+                }}
                 disabled={loading}
                 className="ip_amount"
-                placeholder="124"
+                placeholder="0.0"
               />
             </Form.Item>
             <Form.Item>

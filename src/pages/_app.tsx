@@ -7,6 +7,12 @@ import { Toaster } from "react-hot-toast";
 import { WagmiConfig } from "wagmi";
 
 import { chains, client } from "../wagmi";
+// import { Network, Alchemy } from "alchemy-sdk";
+// const settings = {
+//   apiKey: "GZ2wfLIXvvnfyqzRDt73UeaWDshNi5Sh",
+//   network: Network.MATIC_MUMBAI,
+// };
+// const alchemy = new Alchemy(settings);
 
 import AppHeader from "../components/AppHeader";
 import "../styles/cat.scss";
@@ -16,11 +22,22 @@ function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
+  // React.useEffect(() => {
+  //   if (mounted) {
+  //     async function get() {
+  //       const latestBlock = await alchemy.core.getBlockNumber();
+  //       console.log({ latestBlock });
+  //       alchemy.ws.on()
+  //     }
+  //     get();
+  //   }
+  // }, [mounted]);
+
   return (
     <WagmiConfig client={client}>
       <RainbowKitProvider chains={chains}>
         <NextHead>
-          <title>My wagmi + RainbowKit App</title>
+          <title>APT Auction</title>
         </NextHead>
         {mounted && (
           <>
@@ -28,7 +45,7 @@ function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </>
         )}
-        <Toaster />
+        <Toaster position="top-right" />
       </RainbowKitProvider>
     </WagmiConfig>
   );

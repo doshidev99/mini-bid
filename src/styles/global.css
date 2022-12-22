@@ -67,6 +67,22 @@ body {
   text-transform: capitalize;
 }
 
+th.ant-table-cell {
+  color: #fff !important;
+  background: linear-gradient(166.77deg, #3b4155, #3a3045) !important;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background: #27262c !important;
+  color: #fff;
+  border-radius: 0 !important;
+}
+
+.ant-table-tbody {
+  background: #27262c;
+  color: #fff;
+}
+
 /* animation */
 
 /* ----------------------------------------------

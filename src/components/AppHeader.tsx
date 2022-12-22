@@ -20,43 +20,15 @@ const AppHeader = () => {
             }}
           >
             <Col>
-              <Image
-                src="/assets/img/logo.svg"
-                alt=""
-                width={120}
-                height={120}
-              />
+              <Link href={"/"}>
+                <Image
+                  src="/assets/img/logo.svg"
+                  alt=""
+                  width={120}
+                  height={120}
+                />
+              </Link>
             </Col>
-            {/* <Col
-              style={{
-                color: "#fff",
-              }}
-            >
-              {[
-                {
-                  name: "Home",
-                  href: "/",
-                },
-                {
-                  name: "Dashboard",
-                  href: "/dashboard",
-                },
-              ].map((link) => {
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    style={{
-                      fontSize: 16,
-                      paddingRight: 10,
-                      color: "#fff",
-                    }}
-                  >
-                    {link.name}
-                  </Link>
-                );
-              })}
-            </Col> */}
           </Row>
         </Col>
 

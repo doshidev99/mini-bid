@@ -28,7 +28,6 @@ export const useBidAction = () => {
 
   const hasBidding = async (address: string) => {
     const biddingHash = await zkBidInstance?.bidHashes(address);
-    console.log(biddingHash, "biddingHash");
     storageData.updateBidHashes(+biddingHash);
     return biddingHash;
   };
@@ -40,18 +39,25 @@ export const useBidAction = () => {
   };
 
   const checkBiddingEnd = async () => {
-    const biddingEnd = await zkBidInstance?.biddingEnd();
+    const biddingEnd = (await zkBidInstance?.timeReveal()) > 0 ? true : false;
     storageData.updateBiddingEnd(biddingEnd);
     return biddingEnd;
+  };
+
+  const getTotalRevealed = async () => {
+    if (!zkBidInstance) return 0;
+    const total = await zkBidInstance?.revealed();
+    storageData.updateTotalRevealed(+total);
+    return total;
   };
 
   const onStartBidding = async () => {
     try {
       const tx = await zkBidInstance?.startBidding();
       toast.promise(tx.wait(), {
-        loading: "Loading",
-        success: "Got the data",
-        error: "Error when fetching",
+        loading: "Transaction is pending",
+        success: "Transaction is successful ",
+        error: "Transaction is failed",
       });
 
       return tx.wait().then((receipt: ContractReceipt) => {
@@ -69,14 +75,15 @@ export const useBidAction = () => {
     try {
       const tx = await zkBidInstance?.endBidding();
       toast.promise(tx.wait(), {
-        loading: "Loading",
-        success: "Got the data",
-        error: "Error when fetching",
+        loading: "Transaction is pending",
+        success: "Transaction is successful ",
+        error: "Transaction is failed",
       });
 
       return tx.wait().then((receipt: ContractReceipt) => {
         if (receipt) {
           checkBiddingOpen();
+          checkBiddingEnd();
           getDataList();
         }
       });
@@ -98,16 +105,16 @@ export const useBidAction = () => {
         tx
           .wait()
           .then((receipt: ContractReceipt) => {
+            getDataList();
             if (receipt && address) {
               hasBidding(address);
-              getDataList();
             }
           })
           .finally(() => callback && callback()),
         {
-          loading: "Loading",
-          success: "Got the data",
-          error: "Error when fetching",
+          loading: "Transaction is pending",
+          success: "Transaction is successful ",
+          error: "Transaction is failed",
         }
       );
     } catch (e: any) {
@@ -131,9 +138,10 @@ export const useBidAction = () => {
         tx
           .wait()
           .then((receipt: ContractReceipt) => {
+            getDataList();
+            getTotalRevealed();
             if (receipt && address) {
               hasBidding(address);
-              getDataList();
             }
           })
           .finally(() => callback && callback()),
@@ -153,6 +161,7 @@ export const useBidAction = () => {
     onRevealBid,
     getOwner,
     getVerifier,
+    getTotalRevealed,
     hasBidding,
     checkBiddingOpen,
     checkBiddingEnd,

@@ -4,6 +4,7 @@ import {
   Form,
   Image,
   Input,
+  InputNumber,
   Modal,
   Row,
   Tag,
@@ -19,7 +20,6 @@ import {
   useCheckHasBidding,
   usePreCheck,
 } from "../../web3/useBidAction";
-import { encryptData } from "../../web3/utils/handler";
 import AppButton from "../AppButton";
 import CatLoader from "../CatLoader";
 import AppFormReveal from "./AppFormReveal";
@@ -33,6 +33,7 @@ const AppFormBid = () => {
     proofBid: "",
     hash: "",
   });
+
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
   const { address } = useAccount();
@@ -69,14 +70,18 @@ const AppFormBid = () => {
 
   const [confirmLoading, setConfirmLoading] = useToggle(false);
   const { loading: isChecking } = usePreCheck();
+  const dataStorage = useStorageData();
+
   const { biddingOpen, biddingEnd, owner, bidHashes } = useStorageData();
   const { onStartBidding, onEndBidding, onBid } = useBidAction();
   const { hasBidding, loading: checkingBidding } = useCheckHasBidding();
 
   const handleOk = async () => {
     setConfirmLoading();
-    await onBid(dataBid, onToggle);
-    setConfirmLoading();
+    await onBid(dataBid, () => {
+      onToggle();
+      setConfirmLoading();
+    });
   };
 
   const handleCancel = () => {
@@ -86,7 +91,6 @@ const AppFormBid = () => {
   const isLoadingContext = isChecking || checkingBidding;
 
   if (isLoadingContext) return <CatLoader />;
-
   if (!biddingOpen && !biddingEnd) {
     if (address == owner) {
       return (
@@ -115,10 +119,8 @@ const AppFormBid = () => {
               marginTop: 20,
             }}
           >
-            <Typography.Text>
-              <Tag color="magenta">
-                The bidding has not started yet. Please wait for the owner to
-              </Tag>
+            <Typography.Text className="font-game">
+              The bidding has not started yet. Please wait for the owner to
             </Typography.Text>
           </div>
         </div>
@@ -126,9 +128,10 @@ const AppFormBid = () => {
     }
   }
 
-  if (Boolean(bidHashes)) return <AppFormReveal />;
+  if (bidHashes > 0) return <AppFormReveal />;
 
   if (address == owner && biddingEnd) return null;
+  if (bidHashes == 0 && biddingEnd) return null;
 
   return (
     <div>
@@ -172,9 +175,15 @@ const AppFormBid = () => {
                       required: true,
                       message: "Please input your amount bid!",
                     },
+                    { type: "number", min: 21 },
                   ]}
                 >
-                  <Input
+                  <InputNumber
+                    style={{
+                      width: 100 + "%",
+                      color: "white",
+                      background: "#fff",
+                    }}
                     disabled={loading}
                     className="ip_amount"
                     placeholder="0.0"
